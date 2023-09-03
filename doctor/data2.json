@@ -1,0 +1,146 @@
+{
+"nodes": [
+        {
+          "name": "头晕",
+          "itemStyle": {
+            "color": "#D2E9F8",
+            "border color": "#FFDFC3"
+          },
+          "reply":["头晕的症状有多久了","头晕的严重吗"]
+        },
+        {
+          "name": "目眩",
+          "itemStyle": {
+            "color": "#D2E9F8",
+            "border color": "#FFB370"
+          },
+          "reply":["看东西会很花吗","会影响正常生活吗"]
+        },
+        {
+          "name": "失眠",
+          "itemStyle": {
+            "color": "#D2E9F8",
+            "border color": "#165D8A"
+          },
+          "reply":["失眠的频率大概是多少"]
+        },
+        {
+          "name": "幻想",
+          "itemStyle": {
+            "color": "#ADD7F3",
+            "border color": "#104465"
+          },
+          "reply":["会幻想吗","会经常胡思乱想吗"]
+        },
+        {
+          "name": "血常规",
+          "itemStyle": {
+            "color": "#1C76AF",
+            "border color": "#104465"
+          },
+          "reply":["建议你先去做一个血常规检查"]
+        },
+        {
+          "name": "B超",
+          "itemStyle": {
+            "color": "#208ED6",
+            "border color": "#104465"
+          },
+          "reply":["建议你做个B超检查"]
+        },
+        {
+          "name": "精神分裂症",
+          "itemStyle": {
+            "color": "#D2E9F8",
+            "border color": "#104465"
+          },
+          "reply":["你可能患有精神分裂症"]
+        },
+        {
+          "name": "焦虑症",
+          "itemStyle": {
+            "color": "#D2E9F8",
+            "border color": "#104465"
+          },
+          "reply":["你可能患有焦虑症"]
+        }
+      ],
+"links": [
+        {
+          "source": "头晕",
+          "target": "血常规",
+          "value": 3
+        },
+        {
+          "source": "头晕",
+          "target": "B超",
+          "value": 2
+        },
+        {
+          "source": "头晕",
+          "target": "幻想",
+          "value": 0.5
+        },
+        {
+          "source": "目眩",
+          "target": "血常规",
+          "value": 4
+        },
+        {
+          "source": "目眩",
+          "target": "B超",
+          "value": 3
+        },
+        {
+          "source": "头晕",
+          "target": "幻想",
+          "value": 2
+        },
+        {
+          "source": "失眠",
+          "target": "血常规",
+          "value": 4
+        },
+        {
+          "source": "失眠",
+          "target": "B超",
+          "value": 3
+        },
+        {
+          "source": "失眠",
+          "target": "幻想",
+          "value": 1
+        },
+        {
+          "source": "血常规",
+          "target": "精神分裂症",
+          "value": 5
+        },
+        {
+          "source": "血常规",
+          "target": "焦虑症",
+          "value": 6
+        },
+        {
+          "source": "B超",
+          "target": "精神分裂症",
+          "value": 4
+        },
+        {
+          "source": "B超",
+          "target": "焦虑症",
+          "value": 4
+        },
+        {
+          "source": "幻想",
+          "target": "精神分裂症",
+          "value": 2
+        },
+        {
+          "source": "幻想",
+          "target": "焦虑症",
+          "value": 1.5
+        }
+      ]
+}
+

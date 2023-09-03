@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>精神疾病智能问诊平台</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/card.css" media="all" rel="stylesheet"/>
+    <link href="css/button.css" media="all" rel="stylesheet"/>
+    <link href="./component/styles/setup.css" media="all" rel="stylesheet"/>
+    <link href="./component/styles/says.css" media="all" rel="stylesheet"/>
+    <link href="./component/styles/reply.css" media="all" rel="stylesheet"/>
+    <link href="./component/styles/typing.css" media="all" rel="stylesheet"/>
+    <link href="./component/styles/input.css" media="all" rel="stylesheet"/>
+    <style>
+        .bubble-container {
+            height: 100vh;
+        }
+
+        .bubble-container .input-wrap textarea {
+            margin: 0;
+            width: calc(100% - 30px);
+        }
+
+        .alert {
+            width: 100%;
+            z-index: 999;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+
+<body>
+<!-- Spinner Start -->
+<div id="spinner"
+     class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner"></div>
+</div>
+<!-- Spinner End -->
+
+
+<!-- Navbar & Carousel Start -->
+<div class="container-fluid position-relative p-0">
+    <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
+        <a href="index.html" class="navbar-brand p-0">
+            <h1 class="m-0"><i class="fa fa-user-tie me-2"></i>精神疾病智能问诊平台</h1>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="fa fa-bars"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto py-0">
+                <a href="index.html" class="nav-item nav-link">主页&nbsp;</a>
+                <a href="service.html" class="nav-item nav-link active">服务</a>
+                <a href="about.html" class="nav-item nav-link">技术</a>
+                <a href="contact.html" class="nav-item nav-link">联系</a>
+            </div>
+            <butaton type="button" class="btn text-primary ms-3" data-bs-toggle="modal" data-bs-target="#searchModal"><i
+                    class="fa fa-search"></i></butaton>
+        </div>
+    </nav>
+
+    <div class="container-fluid bg-primary py-5 bg-header" style="margin-bottom: 90px;">
+        <div class="row py-5">
+            <div class="col-12 pt-lg-5 mt-lg-5 text-center">
+                <h1 class="display-4 text-white animated zoomIn">服务&nbsp;</h1>
+                <a href="" class="h5 text-white">Home</a>
+                <i class="far fa-circle text-white px-2"></i>
+                <a href="" class="h5 text-white">Services</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Navbar End -->
+
+
+<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s"
+     style="height: 95vh!important;padding-bottom: 0!important;">
+     <div id="chat" style="height: 100%; width: 30% !important; margin-left: 0; float: left; z-index: 500;"></div>
+     <div id="main" style="height: 100%; width: 70%; float: left; z-index: 200;"></div>
+    </div>
+
+
+    <!-- import the JavaScript file -->
+    <script src="./component/Bubbles.js"></script>
+    <script src="js/process.js"></script>
+    <script src="js/set_graph.js"></script>
+    <script src="./js/echarts.js"></script>
+    <script src="./js/sankey_graph.js"></script>
+    <script src="./js/card_draw.js"></script>
+    <script>
+        // initialize by constructing a named function...
+        // ...and add text processing plugin:
+
+        function makeid() {
+            var result = "";
+            var characters =
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var charactersLength = characters.length;
+            for (var i = 0; i < 20; i++) {
+                result += characters.charAt(
+                    Math.floor(Math.random() * charactersLength)
+                );
+            }
+            return result;
+        }
+
+        //the base url at which RASA is running
+        var base_url = "http://127.0.0.1:88";
+        var key_word;
+        //A unique client id so that the data doesn't get mismatched
+        var client_id = makeid();
+        var data;
+
+        var cardData = [
+                {
+                    imgUrl: "./photo/1.jpg",
+                    title: "心血管疾病治疗",
+                    description: "Recent Advances in Cardiovascular Disease Treatment: A Comprehensive Review",
+                    link: "https://meanbusiness.com/wp-content/uploads/2018/04/IceCream-MultipleCones.gif"
+                },
+                {
+                    imgUrl: "./photo/2.jpg",
+                    title: "肿瘤免疫疗法的前沿研究",
+                    description: "Frontiers in Tumor Immunotherapy Research: Current Trends and Future Prospects",
+                    link: "https://meanbusiness.com/wp-content/uploads/2018/04/IceCream-MultipleCones.gif"
+                },
+                {
+                    imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL5qQX93Ll1FKY0JY4NqgeQIKWqmtCrStzWQ&usqp=CAU",
+                    title: "神经系统退行性疾病的新治疗策略",
+                    description: "Novel Therapeutic Strategies for Neurodegenerative Diseases: A Comprehensive Survey",
+                    link: "https://meanbusiness.com/wp-content/uploads/2018/04/IceCream-MultipleCones.gif"
+                },
+                {
+                    imgUrl: "./photo/4.jpg",
+                    title: "新兴传染病的防控与治疗",
+                    description: "Emerging Infectious Diseases: Strategies for Prevention and Treatment",
+                    link: "https://meanbusiness.com/wp-content/uploads/2018/04/IceCream-MultipleCones.gif"
+                },
+                {
+                    imgUrl: "./photo/5.jpg",
+                    title: "基因编辑技术在遗传疾病治疗中的应用",
+                    description: "Applications of Gene Editing Techniques in the Treatment of Genetic Disorders",
+                    link: "https://meanbusiness.com/wp-content/uploads/2018/04/IceCream-MultipleCones.gif"
+                },
+                {
+                    imgUrl: "./photo/6.jpg",
+                    title: "抗生素耐药性及其应对措施",
+                    description: "Antibiotic Resistance and Mitigation Strategies: An In-depth Analysis",
+                    link: "https://meanbusiness.com/wp-content/uploads/2018/04/IceCream-MultipleCones.gif"
+                },
+                // ... 添加更多卡片数据
+            ];
+
+        // 初始化空的convo对象
+        var convo = {};
+        var input_list = []
+
+
+        var chatWindow = new Bubbles(
+            document.getElementById("chat"),
+            "chatWindow",
+            {
+                // the one that we care about is inputCallbackFn()
+                // this function returns an object with some data that we can process from user input
+                // and understand the context of it
+
+                // this is an example function that matches the text user typed to one of the answer bubbles
+                input_list:[],
+                inputCallbackFn: function (chatObject) {
+                    var miss = function (text_inp = null) {
+                        var xhr = new XMLHttpRequest();
+                        var url = base_url + "/patient/rca";
+                        var input = chatObject.input;
+
+                        // RASA's POST format
+                        var request_body = {
+                            "sender": client_id,
+                            "key_words": input,
+                        };
+                        $.ajax({
+                            url: url,
+                            data: JSON.stringify(request_body),
+                            contentType: "application/json",
+                            type: "post",
+                            success: function (response) {
+                                var answers = [];
+                                var reply = [];
+
+                                var rootCauseText = response.root_cause_text;
+                                var invest1Text = response.invest1_text;
+                                var graph_data = response.graph_data
+                                var content;
+
+                                if (response.recipient_id == client_id) {
+                                    answers.push(rootCauseText); // 根因分析结果
+                                    answers.push(invest1Text)
+                                    convo["talk"] = {
+                                        says: answers,
+                                        reply: reply.map(function (item) {
+                                            return {
+                                                question: item.question,
+                                                answer: item.answer
+                                            };
+                                        })
+                                    };
+
+                                    chatWindow.talk(convo, "talk");
+                                    chatWindow.think(); // 显示正在输入动画
+                                    // 延迟执行代码块
+                                    setTimeout(function() {
+                                        console.log(graph_data)
+                                        sankey_draw(graph_data);  
+                                    }, 1000); // 延迟时间为 1000 毫秒（1秒）
+                                    
+                                }
+                            },
+                        });
+                    };
+                    // 将用户输入传递给miss函数进行处理
+                    miss(chatObject.input);
+
+                    
+                },
+            }
+        );
+            
+        // 设置初始的医生回复
+        convo = {
+            ice:{
+                says: ["你好,请问你有什么问题吗",
+            ],
+            }
+        };
+
+        chatWindow.talk(convo);
+    </script>
+</div>
+
+
+<!-- JavaScript Libraries -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/wow/wow.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/counterup/counterup.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="js/main.js"></script>
+</body>
+
+</html>

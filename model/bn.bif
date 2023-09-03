@@ -1,0 +1,206 @@
+network unknown {
+}
+variable 停止或减少酒精摄入 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 冷漠 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 出现至少一种酒精戒断特征 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 卒中史 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 危险因素 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 呼吸迟缓 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 处理信息的速度减慢 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 女性性功能障碍 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 存在的危险因素 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 对性活动的兴趣缺失/减少（SIAD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 对纳洛酮有剧烈反应 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 对色情或性刺激没有主观性唤起（SIAD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 寻找水和饮酒 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 导致苦恼的性症状 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 性/色情想法或幻想缺失/减少（SIAD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 性活动发起行为缺失/减少（SIAD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 性活动期间的性兴奋/性快感缺失/减少（SIAD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 性活动期间的生殖器或非生殖器感觉缺失/减少（SIAD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 性高潮明显延迟（FOD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 性高潮缺失或强度极小（FOD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 性高潮频率明显不足（FOD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 意识状态改变 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 提取记忆缺失 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 注意力差 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 瞳孔缩小 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 精神性烦渴 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 脱抑制 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 自发、令人苦恼、不愉悦的生殖器充血以及感觉到即将发生性高潮（PGAD/GPD） {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 血管性痴呆 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 解决问题困难 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 酒精依赖性 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 酒精戒断 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 阿片类药物过量 {
+    type discrete [ 2 ] { 0, 1 };
+}
+variable 额叶释放反射 {
+    type discrete [ 2 ] { 0, 1 };
+}
+probability ( 停止或减少酒精摄入 | 酒精戒断 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 冷漠 | 血管性痴呆 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 出现至少一种酒精戒断特征 | 酒精戒断 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 卒中史 | 血管性痴呆 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 危险因素 | 酒精戒断 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 呼吸迟缓 | 阿片类药物过量 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 处理信息的速度减慢 | 血管性痴呆 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 女性性功能障碍 ) {
+    table 0.98, 0.02 ;
+}
+probability ( 存在的危险因素 | 精神性烦渴, 阿片类药物过量 ) {
+    table 0.99, 0.010000000000000009, 0.010000000000000009, 0.010000000000000009, 0.01, 0.99, 0.99, 0.99 ;
+}
+probability ( 对性活动的兴趣缺失/减少（SIAD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 对纳洛酮有剧烈反应 | 阿片类药物过量 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 对色情或性刺激没有主观性唤起（SIAD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 寻找水和饮酒 | 精神性烦渴 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 导致苦恼的性症状 | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 性/色情想法或幻想缺失/减少（SIAD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 性活动发起行为缺失/减少（SIAD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 性活动期间的性兴奋/性快感缺失/减少（SIAD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 性活动期间的生殖器或非生殖器感觉缺失/减少（SIAD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 性高潮明显延迟（FOD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 性高潮缺失或强度极小（FOD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 性高潮频率明显不足（FOD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 意识状态改变 | 阿片类药物过量 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 提取记忆缺失 | 血管性痴呆 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 注意力差 | 血管性痴呆 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 瞳孔缩小 | 阿片类药物过量 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 精神性烦渴 ) {
+    table 0.98, 0.02 ;
+}
+probability ( 脱抑制 | 血管性痴呆 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 自发、令人苦恼、不愉悦的生殖器充血以及感觉到即将发生性高潮（PGAD/GPD） | 女性性功能障碍 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 血管性痴呆 ) {
+    table 0.98, 0.02 ;
+}
+probability ( 解决问题困难 | 血管性痴呆 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 酒精依赖性 | 酒精戒断 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}
+probability ( 酒精戒断 ) {
+    table 0.98, 0.02 ;
+}
+probability ( 阿片类药物过量 ) {
+    table 0.98, 0.02 ;
+}
+probability ( 额叶释放反射 | 血管性痴呆 ) {
+    table 0.99, 0.01, 0.01, 0.99 ;
+}

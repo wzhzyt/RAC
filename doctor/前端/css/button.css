@@ -1,0 +1,27 @@
+/* styles.css */
+
+/* ... 其他样式 ... */
+
+.toggle-button {
+    position: absolute;
+    top: 0px;
+    right: 20px;
+    z-index: 1000; /* 使按钮位于其他内容之上 */
+    background-color: #208ED6; /* 深蓝色背景颜色 */
+    color: white; /* 白色文字颜色 */
+    padding: 10px; /* 可根据需要调整按钮的内边距 */
+    border-radius: 5px; /* 可根据需要调整按钮的圆角程度 */
+    cursor: pointer; /* 鼠标指针样式为手型 */
+    transition: background-color 0.3s, color 0.3s; /* 添加过渡效果 */
+    
+    /* 添加边框样式 */
+    border: 2px solid white; /* 设置边框为2像素宽度的白色实线 */
+}
+
+.toggle-button:hover {
+    background-color: #1C76AF; /* 悬停时的背景颜色 */
+    color: #FFFFFF; /* 悬停时的文字颜色 */
+    
+    /* 悬停时边框颜色保持白色 */
+    border-color: white;
+}
