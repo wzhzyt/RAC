@@ -220,25 +220,9 @@ clients_by_type = {}
 async def handle_client(websocket, path):
     try:
         async for message in websocket:
-            # 解析
-            # parts = message.split('|')
-            # if len(parts) == 2:
-            #     connection_id = id(websocket)
-            #     connection_type = parts[0]
-            #     message_content = parts[1]
 
             content = json.loads(message)
             connection_type = content['sender']
-
-            # re_data = {}
-            #
-            # if connection_type == 'patient':
-            #     re_data = set_dia_data(content)
-            #
-            # if connection_type == 'doctor':
-            #     re_data = {
-            #         "text": content['text']
-            #     }
 
             if connection_type not in clients_by_type:
                 clients_by_type[connection_type] = set()

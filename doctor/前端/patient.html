@@ -142,7 +142,13 @@
         socket.onopen = (event) => {
             console.log("WebSocket connection opened.");
             const connectionType = "patient";
-            socket.send(connectionType + "|" + "Connected");
+            const coll = {
+                sender: "patient",
+                text: []
+            };
+            const jsonMessage = JSON.stringify(coll)
+            socket.send(jsonMessage);
+            
         };
 
 
@@ -193,7 +199,10 @@
         var convo = {};
         var input_list = []
 
-
+        const message = {
+            sender: "patient",
+            text: [], 
+        };
         var chatWindow = new Bubbles(
             document.getElementById("chat"),
             "chatWindow",
@@ -209,8 +218,9 @@
                         var xhr = new XMLHttpRequest();
                         var input = chatObject.input;
                         const messageInput = input;
-                        const connectionType = "patient";
-                        socket.send(connectionType + "|" + messageInput);
+                        message.text.push(messageInput)
+                        const jsonMessage = JSON.stringify(message)
+                        socket.send(jsonMessage);
 
 
                     }    
@@ -225,17 +235,17 @@
         // 设置初始的医生回复
         convo = {
             ice:{
-                says: ["你好,请问你有什么问题吗",
+                says: ["欢迎体验智能问诊系统",
             ],
             }
         };
 
         chatWindow.talk(convo);
         socket.onmessage = (event) => {
-            const message = event.data;
+            const receivemessage = JSON.parse(event.data);
             console.log("received");
             convo["talk"] = {
-                says: [message]
+                says: [receivemessage.text]
             };
             chatWindow.talk(convo, "talk");
 

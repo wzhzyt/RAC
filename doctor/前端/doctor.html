@@ -80,7 +80,12 @@
         socket.onopen = (event) => {
             console.log("WebSocket connection opened.");
             const connectionType = "doctor";
-            socket.send(connectionType + "|" + "Connected");
+            const coll = {
+                sender: "doctor",
+                text: []
+            };
+            const jsonMessage = JSON.stringify(coll)
+            socket.send(jsonMessage);
         };
 
         
@@ -124,9 +129,13 @@
                         var xhr = new XMLHttpRequest();
                         var input = chatObject.input;
                         const messageInput = input;
-                        const connectionType = "doctor";
-                        socket.send(connectionType + "|" + messageInput);
-
+                        const message = {
+                            sender: "doctor",
+                            text: [], 
+                        };
+                        message.text.push(messageInput)
+                        const jsonMessage = JSON.stringify(message)
+                        socket.send(jsonMessage);
                     }
                     miss(chatObject.input);
                 },
@@ -136,19 +145,33 @@
         // 设置初始的医生回复
         convo = {
             ice:{
-                says: ["你好,请问你有什么问题吗",
+                says: ["你好,病人“XXX”已经连通",
             ],
+            
             }
         };
 
         chatWindow.talk(convo);
         socket.onmessage = (event) => {
-            const message = event.data;
+            const message = JSON.parse(event.data);
             console.log("received");
+            const answer = message.root_cause_text + message.invest1_text
+            //talk_text
+            const length = message.patient_text.length;
+            talk_text = message.patient_text[length - 1]
             convo["talk"] = {
-                says: [message]
+                says: [talk_text],//says: [talk_text]
+                reply: [
+                {
+                    question: [message.root_cause_text,message.invest1_text]
+                }
+                ]
             };
             chatWindow.talk(convo, "talk");
+            setTimeout(function() {
+                console.log(message.graph_data)
+                sankey_draw(message.graph_data);  
+            }, 1000); // 延迟时间为 1000 毫秒（1秒）
         };
 
         socket.onclose = (event) => {
