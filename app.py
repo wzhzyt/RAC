@@ -43,7 +43,10 @@ model.train([data_df])
 # 文本相似性计算函数
 def sim_ratio(a, b):
     return SequenceMatcher(None, a, b).ratio()
+
+
 predict_disease = []
+
 
 def format_root_causes(results):
     disease_dict = {}
@@ -169,7 +172,10 @@ def diagnose(symp_list, model):
     graph_data = set_graph(symp_list, invest_dic, disease_dict)
     return root_cause_text, invest1_text, graph_data
 
+
 sym_list = []
+
+
 # 在 '/patient/rca' 路由上响应 POST 请求
 @app.route('/patient/rca', methods=['POST'])
 def rac():
@@ -192,3 +198,45 @@ def rac():
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=88)
+
+import asyncio
+import json
+
+import websockets
+
+clients_by_type = {}
+
+
+async def handle_client(websocket, path):
+    try:
+        async for message in websocket:
+            # 解析
+            parts = message.split('|')
+            if len(parts) == 2:
+                connection_id = id(websocket)
+                connection_type = parts[0]
+                message_content = parts[1]
+
+                if connection_type not in clients_by_type:
+                    clients_by_type[connection_type] = set()
+                clients_by_type[connection_type].add(websocket)
+
+                # 检查是否都已lianjie
+                if len(clients_by_type.get("doctor", set())) > 0 and len(clients_by_type.get("patient", set())) > 0:
+                    target_type = "doctor" if connection_type == "patient" else "patient"
+                    for client_socket in clients_by_type[target_type]:
+                        await client_socket.send(json.dumps({"test": "test"}))
+                        print(f"Sent message to {target_type}: {message_content}")
+
+        # 移除
+        for connection_type in clients_by_type:
+            if websocket in clients_by_type[connection_type]:
+                clients_by_type[connection_type].remove(websocket)
+    except Exception as e:
+        print("Exception:", e)
+
+
+start_server = websockets.serve(handle_client, "localhost", 8765)
+
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()
