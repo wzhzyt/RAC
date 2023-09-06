@@ -2,11 +2,9 @@ from pyrca.analyzers.bayesian import BayesianNetwork
 import pandas as pd
 import json
 from difflib import SequenceMatcher
-from flask import Flask, request, jsonify
-from flask_cors import *
 
-app = Flask(__name__)
-CORS(app, supports_credentials=True)
+# app = Flask(__name__)
+# CORS(app, supports_credentials=True)
 
 # 加载数据并构建贝叶斯网络模型
 with open('data/data.json', encoding="utf-8") as f:
@@ -173,31 +171,43 @@ def diagnose(symp_list, model):
     return root_cause_text, invest1_text, graph_data
 
 
-sym_list = []
-
-
-# 在 '/patient/rca' 路由上响应 POST 请求
-@app.route('/patient/rca', methods=['POST'])
-def rac():
-    content = request.get_data()
-    content = json.loads(content)
-    client_id = content['sender']
-    key_words = content['key_words']
-    sym_list.append(key_words)
+def set_dia_data(content):
+    key_words = content['text']
+    sym_list = key_words
     root_cause_text, invest1_text, graph_data = diagnose(sym_list, model)
     invest1_text = "治疗方案:     " + invest1_text + "     "
     print(invest1_text)
     print(predict_disease)
-    return jsonify({
-        "recipient_id": client_id,
+    return {
+        "patient_text": key_words,
         "root_cause_text": root_cause_text,
         "invest1_text": invest1_text,
         "graph_data": graph_data
-    })
+    }
 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=88)
+# 在 '/patient/rca' 路由上响应 POST 请求
+# @app.route('/patient/rca', methods=['POST'])
+# def rac():
+#     content = request.get_data()
+#     content = json.loads(content)
+#     client_id = content['sender']
+#     key_words = content['key_words']
+#     sym_list.append(key_words)
+#     root_cause_text, invest1_text, graph_data = diagnose(sym_list, model)
+#     invest1_text = "治疗方案:     " + invest1_text + "     "
+#     print(invest1_text)
+#     print(predict_disease)
+#     return jsonify({
+#         "recipient_id": client_id,
+#         "root_cause_text": root_cause_text,
+#         "invest1_text": invest1_text,
+#         "graph_data": graph_data
+#     })
+
+
+# if __name__ == '__main__':
+#     app.run(host="0.0.0.0", port=88)
 
 import asyncio
 import json
@@ -211,22 +221,45 @@ async def handle_client(websocket, path):
     try:
         async for message in websocket:
             # 解析
-            parts = message.split('|')
-            if len(parts) == 2:
-                connection_id = id(websocket)
-                connection_type = parts[0]
-                message_content = parts[1]
+            # parts = message.split('|')
+            # if len(parts) == 2:
+            #     connection_id = id(websocket)
+            #     connection_type = parts[0]
+            #     message_content = parts[1]
 
-                if connection_type not in clients_by_type:
-                    clients_by_type[connection_type] = set()
-                clients_by_type[connection_type].add(websocket)
+            content = json.loads(message)
+            connection_type = content['sender']
 
-                # 检查是否都已lianjie
-                if len(clients_by_type.get("doctor", set())) > 0 and len(clients_by_type.get("patient", set())) > 0:
-                    target_type = "doctor" if connection_type == "patient" else "patient"
-                    for client_socket in clients_by_type[target_type]:
-                        await client_socket.send(json.dumps({"test": "test"}))
-                        print(f"Sent message to {target_type}: {message_content}")
+            # re_data = {}
+            #
+            # if connection_type == 'patient':
+            #     re_data = set_dia_data(content)
+            #
+            # if connection_type == 'doctor':
+            #     re_data = {
+            #         "text": content['text']
+            #     }
+
+            if connection_type not in clients_by_type:
+                clients_by_type[connection_type] = set()
+            clients_by_type[connection_type].add(websocket)
+
+            # 检查是否都已连接
+            if len(clients_by_type.get("doctor", set())) > 0 and len(clients_by_type.get("patient", set())) > 0:
+                target_type = "doctor" if connection_type == "patient" else "patient"
+                re_data = {}
+                if connection_type == 'patient' and len(content['text']) != 0:
+                    re_data = set_dia_data(content)
+
+                if connection_type == 'doctor':
+                    re_data = {
+                        "text": content['text']
+                    }
+
+                for client_socket in clients_by_type[target_type]:
+                    if len(content['text']) != 0:
+                        await client_socket.send(json.dumps(re_data, ensure_ascii=False))
+                        print(f"Sent message to {target_type}")
 
         # 移除
         for connection_type in clients_by_type:
