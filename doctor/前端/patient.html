@@ -118,6 +118,8 @@
         // initialize by constructing a named function...
         // ...and add text processing plugin:
 
+
+
         function makeid() {
             var result = "";
             var characters =
@@ -239,7 +241,20 @@
             ],
             }
         };
+        /*
+        window.addEventListener('DOMContentLoaded', function () {
+            // 检查 main 容器中是否存在 cardContainer 容器
+            if (!document.getElementById('main').querySelector('#cardContainer')) {
+                // 如果不存在，执行以下代码
 
+                // 添加 resize 监听，当窗口大小改变时重新绘制图表
+                window.addEventListener('resize', function () {
+                    myChart.resize();
+                });
+            }
+        });
+        card_draw(cardData, 3);
+        */
         chatWindow.talk(convo);
         socket.onmessage = (event) => {
             const receivemessage = JSON.parse(event.data);
